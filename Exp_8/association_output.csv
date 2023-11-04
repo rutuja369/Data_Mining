@@ -1,0 +1,6 @@
+Association Rule: { A } -> {B } , Confidence: 66.6667%
+Association Rule: { B } -> {A } , Confidence: 57.1429%
+Association Rule: { A } -> {C } , Confidence: 66.6667%
+Association Rule: { C } -> {A } , Confidence: 66.6667%
+Association Rule: { B } -> {C } , Confidence: 57.1429%
+Association Rule: { C } -> {B } , Confidence: 66.6667%
