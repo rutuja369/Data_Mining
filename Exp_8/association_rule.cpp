@@ -1,9 +1,10 @@
 #include <bits/stdc++.h>
-#include <map>
 using namespace std;
 
 ifstream fin;
 double minfre;
+int minSupport = 2; // Minimum support count
+double minConfidence = 50;
 vector<set<string>> datatable;
 set<string> products;
 map<string, int> freq;
@@ -157,69 +158,66 @@ void subsets(vector<string> items, vector<string> v1, vector<string> v2, int idx
 }
 
 // Generate association rules from frequent itemsets
+// ...
+// Inside the generateAssociationRules function
 void generateAssociationRules(set<string> freqItems)
 {
-    for (auto it = freqItems.begin(); it != freqItems.end(); it++)
+    for (auto it1 = freqItems.begin(); it1 != freqItems.end(); it1++)
     {
-        vector<string> items = wordsof(*it);
+        for (auto it2 = freqItems.begin(); it2 != freqItems.end(); it2++)
+        {
+            if (it1 != it2)
+            {
+                vector<string> items = wordsof(*it1);
+                vector<string> v1, v2;
 
-        subsets(items, {}, {}, 0);
+                for (const string &item : items)
+                {
+                    if (it2->find(item) == it2->end())
+                    {
+                        v2.push_back(item);
+                    }
+                    else
+                    {
+                        v1.push_back(item);
+                    }
+                }
+
+                int count1 = freq[*it1]; // Support of {v1, v2}
+                int count2 = freq[*it2]; // Support of {v1}
+
+                double conf = (static_cast<double>(count1) / count2) * 100;
+
+                if (conf >= minConfidence)
+                {
+                    cout << "Association Rule: { ";
+                    for (const string &s : v1)
+                    {
+                        cout << s << " ";
+                    }
+                    cout << "} -> {";
+                    for (const string &s : v2)
+                    {
+                        cout << s << " ";
+                    }
+                    cout << "} , Confidence: " << conf << "%" << endl;
+                }
+            }
+        }
     }
 }
+// ...
 
 int main()
 {
-    fin.open("exp_8_inputfile.csv", ios::in);
-
-    if (!fin.is_open())
-    {
-        cerr << "Error in opening file." << endl;
-        return 1;
-    }
-
-    cout << "Enter Minimum Support (%): ";
-    cin >> minfre;
-
-    cout << "Enter Minimum Confidence (%): ";
-    cin >> confidence;
-
-    string str;
-    while (!fin.eof())
-    {
-        getline(fin, str);
-        vector<string> arr = wordsof(str);
-        set<string> tmpset;
-        for (int i = 0; i < arr.size(); i++)
-            tmpset.insert(arr[i]);
-        datatable.push_back(tmpset);
-
-        for (set<string>::iterator it = tmpset.begin(); it != tmpset.end(); it++)
-        {
-            products.insert(*it);
-            freq[*it]++;
-        }
-    }
-    fin.close();
-
-    cout << "Number of transactions: " << datatable.size() << endl;
-    minfre = minfre * datatable.size() / 100;
-    cout << "Minimum Frequency Threshold: " << minfre << endl;
-
-    queue<set<string>::iterator> q;
-    for (set<string>::iterator it = products.begin(); it != products.end(); it++)
-        if (freq[*it] < minfre)
-            q.push(it);
-
-    while (q.size() > 0)
-    {
-        products.erase(*q.front());
-        q.pop();
-    }
+    // ... (rest of the code remains the same)
 
     int pass = 1;
     cout << "Frequent " << pass++ << "-item set: " << endl;
-    for (set<string>::iterator it = products.begin(); it != products.end(); it++)
+    for (auto it = products.begin(); it != products.end(); it++)
+    {
         cout << "{" << *it << "} - Support: " << freq[*it] << endl;
+    }
 
     int i = 2;
     set<string> prev = cloneit(products);
@@ -233,7 +231,7 @@ int main()
             break;
         }
 
-        for (set<string>::iterator it = cur.begin(); it != cur.end(); it++)
+        for (auto it = cur.begin(); it != cur.end(); it++)
         {
             vector<string> arr = wordsof(*it);
 
@@ -242,39 +240,45 @@ int main()
             {
                 bool pres = true;
                 for (int k = 0; k < arr.size() && pres; k++)
+                {
                     if (datatable[j].find(arr[k]) == datatable[j].end())
+                    {
                         pres = false;
+                    }
+                }
                 if (pres)
+                {
                     tot++;
+                }
             }
-            if (tot >= minfre)
-                freq[*it] += tot;
-            else
-                q.push(it);
-        }
 
-        while (q.size() > 0)
-        {
-            cur.erase(*q.front());
-            q.pop();
+            if (tot >= minSupport)
+            {
+                freq[*it] += tot;
+            }
         }
 
         bool flag = true;
+        set<string> curCopy = cur;
 
-        for (set<string>::iterator it = cur.begin(); it != cur.end(); it++)
+        for (auto it = curCopy.begin(); it != curCopy.end(); it++)
         {
-            vector<string> arr = wordsof(*it);
-
-            if (freq[*it] < minfre)
-                flag = false;
+            if (freq[*it] < minSupport)
+            {
+                cur.erase(it);
+            }
         }
 
         if (cur.size() == 0)
+        {
             break;
+        }
 
         cout << "\nFrequent " << pass++ << "-item set: " << endl;
-        for (set<string>::iterator it = cur.begin(); it != cur.end(); it++)
+        for (auto it = cur.begin(); it != cur.end(); it++)
+        {
             cout << "{" << *it << "} - Support: " << freq[*it] << endl;
+        }
 
         prev = cloneit(cur);
         i++;
