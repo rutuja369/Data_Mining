@@ -1,0 +1,18 @@
+Min-Max Normalization
+10
+17.2222
+13.3333
+20
+11.6667
+Z-Score Normalization
+-1.21157
+0.757228
+-0.302891
+1.51446
+-0.757228
+Decimal- Scaling Normalization
+0.12
+0.25
+0.18
+0.3
+0.15

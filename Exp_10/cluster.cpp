@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <limits>
 using namespace std;
 
 // Function to calculate the Euclidean distance between two points (x1, y1) and (x2, y2)
@@ -16,10 +15,11 @@ int main()
     int i = 0;
     int val1;
     int val2;
+
     vector<pair<int, int>> v;
 
     // Open the input file for reading
-    fstream in("exp_10_inputfile.csv", ios::in);
+    ifstream in("exp_10_inputfile.csv", ios::in);
 
     // Check if the file was opened successfully
     if (!in.is_open())
@@ -72,7 +72,7 @@ int main()
     ofstream out("cluster_output.csv");
 
     // Write the header for the output CSV file
-    out << " , p1 ,p2 ,p3 ,p4,C";
+    out << " , p1 ,p2 ,p3 ,p4, p5,C";
     out << "\n";
 
     // Calculate the distances between all pairs of points

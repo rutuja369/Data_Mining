@@ -77,7 +77,6 @@ int main()
 {
 
     // get the input data set
-
     ifstream file("exp4_inputfile.csv");
 
     // variables to store attribute data and the categorical class: playtennis
@@ -85,19 +84,22 @@ int main()
 
     // parentCount-> to calculate main entropy for the categorical class: playtennis
     map<string, int> parentCounts;
-    /*
-    childCount-> to calculate the sttribute table of selected attribute
-    if-> childName = column 3 (temp)
-    so, for attribute= temp -> generate a matrix of play and no-play (storing it as a map)
-    */
 
+    /*
+    childCounts-> to calculate the attribute table of selected attribute
+    if-> childName = column 3 (temp)
+    so, for attribute = temp -> generate a matrix of play and no-play (storing it as a map)
+    */
+    
     map<string, map<string, int>> childCounts;
+
 
     if (!file.is_open())
     {
         cerr << "Error opening input file." << endl;
         return -1;
     }
+
 
     int i = 0;
     string childName;

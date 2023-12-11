@@ -1,0 +1,5 @@
+Attribute,Gain,Gini Index
+Outlook,0.24675,0.342857
+Temp,0.0292226,0.440476
+Humidity,0.151836,0.367347
+Wind,0.048127,0.428571

@@ -1,8 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <sstream>
-
+#include<bits/stdc++.h>
 using namespace std;
 
 vector<int> readData(const string &filename)
@@ -16,11 +12,13 @@ vector<int> readData(const string &filename)
         exit(1);
     }
 
+
     string line, value;
     int lineCount = 0;
 
     while (getline(file, line))
     {
+
         if (lineCount > 0)
         {
             stringstream ss(line);
@@ -67,6 +65,7 @@ void writeCorrelationCoefficient(const string &filename, float corr_coeff)
     file << "Pearson Correlation Coefficient"
          << "," << corr_coeff << endl;
     file.close();
+
 }
 
 int main()
@@ -84,6 +83,5 @@ int main()
     cout << "Correlation coefficient calculated and saved in '" << outputFileName << "'." << endl;
 
     return 0;
-
 
 }

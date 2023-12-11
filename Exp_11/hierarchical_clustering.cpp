@@ -48,6 +48,7 @@ string agglomerative(string input)
             {
                 try
                 {
+                    //Calculating dist of each point with all other points
                     dm[point][points[idx]] = stoi(dist);
                 }
                 catch (const std::invalid_argument &e)
@@ -101,6 +102,7 @@ string agglomerative(string input)
 
     string newPt = down + up;
 
+
     // Update distances and remove old points from the matrix
     for (auto p : dm)
     {
@@ -111,14 +113,15 @@ string agglomerative(string input)
             dm[point][newPt] = min(dm[point][up], dm[point][down]);
         }
     }
-
+    //dm[down] -> map traversing in F ka d.s
     for (auto p : dm[down])
     {
         point = p.first;
+        //f to a dist
         int d1 = p.second;
 
         if (point[0] < up[0])
-            d1 = min(d1, dm[up][point]);
+            d1 = min(d1, dm[up][point]); //e to a dist
         else
             d1 = min(d1, dm[point][up]);
 
@@ -175,6 +178,7 @@ string agglomerative(string input)
     fwtr << down << " & " << up << "\n";
 
     return output;
+
 }
 
 int main()
@@ -193,7 +197,7 @@ int main()
     string point;
 
     // Determine the number of points in the dataset
-    while (getline(st, point, ','))
+    while(getline(st, point, ','))
     {
         if (j == 0)
         {
@@ -202,7 +206,7 @@ int main()
         }
         len++;
     }
-
+    cout<<len<<endl;
     // Repeatedly perform agglomerative clustering to create clusters
     for (int i = 1; i <= len - 2; i++)
     {

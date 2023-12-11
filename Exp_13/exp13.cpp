@@ -1,119 +1,72 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main()
-{
-    // Variables to store data
-    string line, word;
-    ifstream file("exp_13_inputfile.csv");
-    string number, color, legs, height, smelly, species;
-    map<string, double> parent;
-    map<string, map<string, map<string, double>>> child;
-    int count = 0;
-    vector<string> title;
+vector<string>attributes;
+map<string,int>class_attri_cnt;
+map<string,map<string,map<string,int>>>attribute_yn_cnt;
+ 
+double calculateProbability(string Outlook,string Temp,string Humidity,string Wind,string playgame){
+ 
+     double yes_cnt = class_attri_cnt["Yes"];
+     double no_cnt = class_attri_cnt["No"];
+     double total = yes_cnt + no_cnt;
 
-    // Check if the file is open
-    if (file.is_open())
-    {
-        int i = 0;
+     double ans = class_attri_cnt[playgame]/total * (attribute_yn_cnt[attributes[0]][Outlook][playgame])/(class_attri_cnt[playgame]) *(attribute_yn_cnt[attributes[1]][Temp][playgame])/(class_attri_cnt[playgame])*(attribute_yn_cnt[attributes[2]][Humidity][playgame])/(class_attri_cnt[playgame])* (attribute_yn_cnt[attributes[3]][Wind][playgame])/(class_attri_cnt[playgame]);
+     return ans;
 
-        while (file >> line)
-        {
-            stringstream str(line);
-            if (i == 0)
-            {
-                // Read the column headings
-                string heading;
-                while (getline(str, heading, ','))
-                {
-                    title.push_back(heading);
-                }
-                i++;
-                continue;
-            }
-            vector<string> columns;
-            while (getline(str, number, ','))
-            {
-                columns.push_back(number);
-            }
+ };
 
-            int n = columns.size();
+int main(){
+    ifstream input("exp13_inputfile.csv");
+  
+    string line, day, outlook, temp, humidity, wind, playGame;
+      int j = 0;
+    while(getline(input,line)){
+      
+        stringstream str(line);
 
-            parent[columns[n - 1]]++; // Count the occurrences of the result class
-            for (int i = 1; i < n - 1; i++)
-            {
-                // Count occurrences of attributes given the result class
-                child[title[i]][columns[i]][columns[n - 1]]++;
-            }
+        getline(str,day,',');
+        getline(str,outlook,',');
+        getline(str,temp,',');
+        getline(str,humidity,',');
+        getline(str,wind,',');
+        getline(str,playGame,',');
 
-            count++; // Count total instances
+        if(j==0){
+        j++;
+        attributes.push_back(outlook);
+        attributes.push_back(temp);
+        attributes.push_back(humidity);
+        attributes.push_back(wind);
+        continue;
         }
+       
+       class_attri_cnt[playGame]++;
 
-        vector<string> resultclass;
-        for (auto it : parent)
-        {
-            resultclass.push_back(it.first);
-        }
+       attribute_yn_cnt[attributes[0]][outlook][playGame]++;
+       attribute_yn_cnt[attributes[1]][temp][playGame]++;
+       attribute_yn_cnt[attributes[2]][humidity][playGame]++;
+       attribute_yn_cnt[attributes[3]][wind][playGame]++;
 
-        vector<double> output(resultclass.size(), 1);
-        for (auto it : child)
-        {
-            string input;
-        again:
-            cout << "Enter " << it.first << " condition: ";
-            cin >> input;
-
-            auto curr = child[it.first].find(input);
-            if (curr == child[it.first].end())
-            {
-                cout << "No match. Please enter a valid condition.\n";
-                goto again;
-            }
-            for (int i = 0; i < resultclass.size(); i++)
-            {
-                // Calculate conditional probabilities
-                cout << child[it.first][input][resultclass[i]] << " / " << parent[resultclass[i]] << endl;
-                double val = child[it.first][input][resultclass[i]] / parent[resultclass[i]];
-                output[i] *= val;
-
-                cout << output[i] << endl;
-
-                cout << "Updated output: " << output[i] << endl;
-            }
-        }
-
-        for (int i = 0; i < resultclass.size(); i++)
-        {
-            // Multiply by prior probabilities
-            output[i] *= parent[resultclass[i]] / count;
-        }
-        double sum = accumulate(output.begin(), output.end(), 0.0);
-
-        // Output results
-        cout << "Sum of probabilities: " << sum << endl;
-        cout << "Output probabilities:\n";
-        int maxpercent = INT_MIN;
-        string finalclass = "";
-        for (int i = 0; i < resultclass.size(); i++)
-        {
-            cout << resultclass[i] << ": " << output[i] << endl;
-            cout << "Percentage: " << (output[i] / sum) * 100 << "%" << endl;
-            if ((resultclass[i] == "H") || (resultclass[i] == "M"))
-            {
-                if (((output[i] / sum) * 100) > maxpercent)
-                {
-                    maxpercent = (output[i] / sum) * 100;
-                    finalclass = resultclass[i];
-                }
-            }
-        }
-
-        cout << "Thus, the new instance belongs to " << finalclass << " species " << endl;
-    }
-    else
-    {
-        cout << "Could not open the file." << endl;
     }
 
-    return 0;
+
+    double yes_cnt = class_attri_cnt["Yes"];
+    double no_cnt = class_attri_cnt["No"];
+    double total = yes_cnt + no_cnt;
+
+     cout << "Enter the unknown case" << endl;
+     string Outlook, Temp, Humidity, Wind;
+     cin >> Outlook >> Temp >> Humidity >> Wind;
+
+     double p_yes = calculateProbability(Outlook, Temp, Humidity, Wind,"Yes");
+     double p_no = calculateProbability(Outlook, Temp, Humidity, Wind,"No");
+
+     cout << "Probability of yes is "<<p_yes <<endl;
+     cout<<"Probability of no is "<< p_no << endl;
+
+     if(p_yes > p_no ) {
+        cout << "The unknown case is classified as Yes" ;
+     }
+     else cout<< "The unknown case is classified as No";
 }

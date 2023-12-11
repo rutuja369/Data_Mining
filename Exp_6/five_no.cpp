@@ -8,8 +8,15 @@ float calculateMedian(vector<int> a)
     if (size % 2 == 1)
         return a[size / 2];
     else
-        return (a[(size / 2) - 1] + a[size / 2]) / 2.0;
+        return (a[(size/2) - 1] + a[(size/2)]) / 2.0;
 }
+
+/*
+NOTE:
+If n:
+1. odd: then skip the median and consider remaining ele set from left and right for calculating q1 and q3
+2. even: then we have 2 median values -> add left val in cal q1 and right val in cal q3
+*/
 
 // Function to calculate the first quartile (Q1)
 float calculateQuartile1(vector<int> v)
@@ -49,7 +56,7 @@ float calculateQuartile3(vector<int> v)
 int main()
 {
     ifstream in("exp_6_inputfile.csv");
-    if (!in.is_open())
+    if(!in.is_open())
     {
         cout << "Error: Unable to open the input file." << endl;
         exit(0);
@@ -79,6 +86,7 @@ int main()
     int n = arr.size();
     sort(arr.begin(), arr.end());
 
+
     // Write results to the output file and console
     out << "Minimum value: "
         << "," << arr[0] << "\n";
@@ -91,6 +99,7 @@ int main()
     out << "Maximum value: "
         << "," << arr[n - 1] << "\n";
 
+    
     cout << "The minimum value is " << arr[0] << endl;
     cout << "The First Quartile (Q1) is " << calculateQuartile1(arr) << endl;
     cout << "The median is " << calculateMedian(arr) << endl;

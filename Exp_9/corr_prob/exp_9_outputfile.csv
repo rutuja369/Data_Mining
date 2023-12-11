@@ -1,0 +1,6 @@
+vector 1 and vector 2 are negatively correlated: 0.666667
+vector 1 and vector 3 are positively correlated: 1.2
+vector 1 and vector 4 are negatively correlated: 0.666667
+vector 2 and vector 3 are positively correlated: 1.2
+vector 2 and vector 4 are negatively correlated: 0.666667
+vector 3 and vector 4 are negatively correlated: 0.8

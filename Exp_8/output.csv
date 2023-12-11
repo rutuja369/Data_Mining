@@ -1,0 +1,8 @@
+Association Rule: { A B C } -> {E } , Confidence: 50%
+Association Rule: { A B E } -> {C } , Confidence: 50%
+Association Rule: { A C E } -> {B } , Confidence: 100%
+Association Rule: { A E } -> {B C } , Confidence: 50%
+Association Rule: { B C E } -> {A } , Confidence: 100%
+Association Rule: { B E } -> {A C } , Confidence: 50%
+Association Rule: { C E } -> {A B } , Confidence: 100%
+Association Rule: { E } -> {A B C } , Confidence: 50%
